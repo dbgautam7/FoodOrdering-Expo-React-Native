@@ -9,7 +9,7 @@ export default function MenuScreen() {
       <FlatList
         numColumns={2}
         data={products}
-        renderItem={({item}) => <ProductListItem product={item} />}
+        renderItem={({item}) => <ProductListItem product={item} key={item.id} />}
         contentContainerStyle={{
           gap: 10,
           padding: 10,

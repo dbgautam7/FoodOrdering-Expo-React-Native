@@ -1,52 +1,66 @@
-import {Image, Pressable, StyleSheet} from 'react-native';
-import React, { useState } from 'react';
-import {Text, View} from '../../../components/Themed';
-import {Stack, useLocalSearchParams} from 'expo-router';
-import products from '@/assets/data/products';
-import Button from '@/src/components/Button';
+import { Image, Pressable, StyleSheet } from 'react-native'
+import React, { useState } from 'react'
+import { Text, View } from '../../../components/Themed'
+import { Stack, useLocalSearchParams, useRouter } from 'expo-router'
+import products from '@/assets/data/products'
+import Button from '@/src/components/Button'
+import { useCartContext } from '@/src/providers/CartProvider'
+import { PizzaSize } from '@/src/types'
 
-const sizes=['S','M', 'L',"XL"]
+const sizes: PizzaSize[] = ['S', 'M', 'L', 'XL']
 
 const ProductDetailScreen = () => {
-  const [selectedSize, setSelectedSize]=useState('M')
-  const {id} = useLocalSearchParams();
-  const product=products.find((item)=>item.id.toString()===id)
+  const { addItem } = useCartContext()
+  const router = useRouter()
+  const [selectedSize, setSelectedSize] = useState<PizzaSize>('M')
+  const { id } = useLocalSearchParams()
+  const product = products?.find((item) => item.id.toString() === id)
 
-  if(!product) {
-return <Text>No Products Found!</Text>
-  } 
+  if (!product) {
+    return <Text>No Products Found!</Text>
+  }
 
-  const addToCart=()=>{
-alert("Add to cart clicked")
+  const addToCart = () => {
+    if (!product) return
+    addItem(product, selectedSize)
+    router.push('cart')
   }
   return (
     <View style={styles.container}>
-      <Stack.Screen options={{title:`${product?.name}`}} />
+      <Stack.Screen options={{ title: `${product?.name}` }} />
       <Image
-          source={{
-            uri: product.image || '',
-          }}
-          style={styles.image}
-          resizeMode="contain"
-        />
-        <Text>Select Size</Text>
-        <View style={styles.sizes}>
-        {sizes.map((item)=>{
+        source={{
+          uri: product.image || '',
+        }}
+        style={styles.image}
+        resizeMode="contain"
+      />
+      <Text>Select Size</Text>
+      <View style={styles.sizes}>
+        {sizes.map((item, index) => {
           return (
-            <Pressable onPress={()=>setSelectedSize(item)} style={[styles.size, {backgroundColor:selectedSize===item ? 'gray':'black'}]}>
-              <Text style={styles.sizeText} key={item}>{item}</Text>
+            <Pressable
+              key={index}
+              onPress={() => setSelectedSize(item)}
+              style={[
+                styles.size,
+                { backgroundColor: selectedSize === item ? 'gray' : 'black' },
+              ]}
+            >
+              <Text style={styles.sizeText} key={item}>
+                {item}
+              </Text>
             </Pressable>
           )
         })}
-        </View>
+      </View>
       <Text style={styles.title}>{product.price}</Text>
-      <Button title='Add to cart' onPress={addToCart} />
+      <Button title="Add to cart" onPress={addToCart} />
     </View>
-  );
-};
+  )
+}
 
-export default ProductDetailScreen;
-
+export default ProductDetailScreen
 
 const styles = StyleSheet.create({
   container: {
@@ -56,29 +70,27 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: '600',
-    marginTop:'auto'
+    marginTop: 'auto',
   },
   image: {
     width: '100%',
     aspectRatio: 1,
   },
-  sizes:{
-    display:'flex',
-    flexDirection:'row',
-    justifyContent:'space-around',
-    marginVertical:16
+  sizes: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginVertical: 16,
   },
-  size:{
-    width:50,
-    aspectRatio:1,
-    borderRadius:25,
-    alignItems:'center',
-    justifyContent:'center'
+  size: {
+    width: 50,
+    aspectRatio: 1,
+    borderRadius: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  sizeText:{
-  fontSize:20,
-  fontWeight:'600'
-}
-});
-
-
+  sizeText: {
+    fontSize: 20,
+    fontWeight: '600',
+  },
+})

@@ -1,13 +1,16 @@
-import {Image, Pressable, StyleSheet} from 'react-native';
-import {Text} from '@/src/components/Themed';
-import Colors from '@/src/constants/Colors';
-import {Product} from '@/src/types';
-import {Link} from 'expo-router';
+import { Image, Pressable, StyleSheet, Vibration } from 'react-native'
+import { Text } from '@/src/components/Themed'
+import Colors from '@/src/constants/Colors'
+import { Product } from '@/src/types'
+import { Link } from 'expo-router'
 
-const ProductListItem = ({product}: {product: Product}) => {
+const ProductListItem = ({ product }: { product: Product }) => {
   return (
     <Link href={`/menu/${product.id}`} asChild>
-      <Pressable style={styles.container}>
+      <Pressable
+        onPress={() => Vibration.vibrate(100)}
+        style={styles.container}
+      >
         <Image
           source={{
             uri: product.image || '',
@@ -19,10 +22,10 @@ const ProductListItem = ({product}: {product: Product}) => {
         <Text style={styles.price}>${product.price}</Text>
       </Pressable>
     </Link>
-  );
-};
+  )
+}
 
-export default ProductListItem;
+export default ProductListItem
 
 const styles = StyleSheet.create({
   container: {
@@ -46,4 +49,4 @@ const styles = StyleSheet.create({
     width: '100%',
     aspectRatio: 1,
   },
-});
+})
