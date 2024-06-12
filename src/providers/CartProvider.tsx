@@ -12,6 +12,7 @@ export const CartContext = createContext<CartType>({
   items: [],
   addItem: () => {},
   updateQuantity: () => {},
+  totalPrice: 0,
 })
 
 const CartProvider = ({ children }: PropsWithChildren) => {
@@ -47,8 +48,14 @@ const CartProvider = ({ children }: PropsWithChildren) => {
       .filter((item) => item.quantity > 0)
     setItems(updatedItems)
   }
+  const totalPrice = items.reduce(
+    (sum, item) => (sum += item.product.price * item.quantity),
+    0
+  )
   return (
-    <CartContext.Provider value={{ items, addItem, updateQuantity }}>
+    <CartContext.Provider
+      value={{ items, addItem, updateQuantity, totalPrice }}
+    >
       {children}
     </CartContext.Provider>
   )

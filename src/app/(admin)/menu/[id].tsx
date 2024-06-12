@@ -44,7 +44,7 @@ const ProductDetailScreen = () => {
               onPress={() => setSelectedSize(item)}
               style={[
                 styles.size,
-                { backgroundColor: selectedSize === item ? 'gray' : 'black' },
+                { backgroundColor: selectedSize === item ? 'green' : 'gray' },
               ]}
             >
               <Text style={styles.sizeText} key={item}>

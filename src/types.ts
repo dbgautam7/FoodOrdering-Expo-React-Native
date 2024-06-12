@@ -52,4 +52,5 @@ export type CartType = {
   items: CartItem[]
   addItem: (product: Product, size: CartItem['size']) => void
   updateQuantity: (itemId: string, amount: -1 | 1) => void
+  totalPrice: number
 }
