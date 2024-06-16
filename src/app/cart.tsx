@@ -7,6 +7,7 @@ import Button from '../components/Button'
 
 const Cart = () => {
   const { items, totalPrice } = useCartContext()
+
   return (
     <View style={styles.container}>
       {items?.length ? (

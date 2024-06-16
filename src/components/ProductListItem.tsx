@@ -2,11 +2,12 @@ import { Image, Pressable, StyleSheet, Vibration } from 'react-native'
 import { Text } from '@/src/components/Themed'
 import Colors from '@/src/constants/Colors'
 import { Product } from '@/src/types'
-import { Link } from 'expo-router'
+import { Link, useSegments } from 'expo-router'
 
 const ProductListItem = ({ product }: { product: Product }) => {
+  const segments = useSegments()
   return (
-    <Link href={`/menu/${product.id}`} asChild>
+    <Link href={`${segments[0]}/menu/${product.id}`} asChild>
       <Pressable
         onPress={() => Vibration.vibrate(100)}
         style={styles.container}
