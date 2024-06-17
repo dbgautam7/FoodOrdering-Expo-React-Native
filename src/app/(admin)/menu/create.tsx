@@ -1,12 +1,20 @@
-import { Image, StyleSheet, Text, TextInput, View } from 'react-native'
+import { Alert, Image, StyleSheet, Text, TextInput, View } from 'react-native'
+import * as ImagePicker from 'expo-image-picker'
 import React, { useState } from 'react'
 import Button from '@/src/components/Button'
 import Colors from '@/src/constants/Colors'
+import { Stack, useLocalSearchParams } from 'expo-router'
 
 const CreateProductScreen = () => {
   const [name, setName] = useState<string>('')
   const [price, setPrice] = useState<string>('')
+  const [image, setImage] = useState<string | null>(null)
   const [errors, setErrors] = useState<string>('')
+
+  const { id } = useLocalSearchParams()
+  const isEdit = !!id
+  const defaultPizzaImage =
+    'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/food/peperoni.png'
 
   const validateInput = () => {
     setErrors('')
@@ -20,31 +28,81 @@ const CreateProductScreen = () => {
     }
 
     if (isNaN(parseFloat(price))) {
-      setErrors('Price is a number')
+      setErrors('Price must be a number')
       return false
     }
     return true
+  }
+
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    })
+
+    console.log(result)
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri as string)
+    }
+  }
+
+  const handleSubmit = () => {
+    isEdit ? handleEditProduct() : handleCreateProduct()
   }
 
   const handleCreateProduct = () => {
     if (!validateInput()) {
       return
     }
-    console.log('product')
+    console.log('product creating')
 
     setName('')
     setPrice('')
   }
 
+  const handleEditProduct = () => {
+    if (!validateInput()) {
+      return
+    }
+    console.log('product editing')
+
+    setName('')
+    setPrice('')
+  }
+
+  const handleDelete = () => {
+    console.log('called')
+    Alert.alert('Product deleted')
+  }
+
+  const confirmDelete = () => {
+    Alert.alert('Confirm', 'Are you sure want to delete this product?', [
+      { text: 'Cancel' },
+      { text: 'Delete', style: 'destructive', onPress: handleDelete },
+    ])
+  }
+
   return (
     <View style={styles.container}>
+      <Stack.Screen
+        options={{
+          title: `${isEdit ? 'Edit Product' : 'Create Product'} `,
+          headerTitleAlign: 'center',
+        }}
+      />
       <Image
         style={styles.image}
         source={{
-          uri: 'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/food/peperoni.png',
+          uri: image || defaultPizzaImage,
         }}
       />
-      <Text style={styles.selectImageButton}>Select Image</Text>
+      <Text onPress={pickImage} style={styles.selectImageButton}>
+        Select Image
+      </Text>
       <Text style={styles.label}>Name</Text>
       <TextInput
         value={name}
@@ -62,7 +120,10 @@ const CreateProductScreen = () => {
         keyboardType="numeric"
       />
       <Text style={styles.error}>{errors}</Text>
-      <Button title="Create" onPress={handleCreateProduct} />
+      <Button title={`${isEdit ? 'Edit' : 'Create'}`} onPress={handleSubmit} />
+      {isEdit && (
+        <Button title="Delete" type="danger" onPress={confirmDelete} />
+      )}
     </View>
   )
 }
@@ -93,6 +154,7 @@ const styles = StyleSheet.create({
     width: '50%',
     aspectRatio: 1,
     alignSelf: 'center',
+    borderRadius: 1000,
   },
 
   selectImageButton: {

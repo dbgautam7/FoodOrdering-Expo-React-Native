@@ -4,18 +4,22 @@ import { Text, StyleSheet, Pressable } from 'react-native'
 interface IProps {
   title?: string
   onPress?: () => void
+  type?: string
 }
 
-export default function Button({ title, onPress }: IProps) {
+export default function Button({ title, onPress, type = 'default' }: IProps) {
   return (
-    <Pressable style={styles.button} onPress={onPress}>
+    <Pressable
+      style={type === 'default' ? styles.defaultButton : styles.dangerButton}
+      onPress={onPress}
+    >
       <Text style={styles.text}>{title}</Text>
     </Pressable>
   )
 }
 
 const styles = StyleSheet.create({
-  button: {
+  defaultButton: {
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 12,
@@ -23,6 +27,16 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     elevation: 3,
     backgroundColor: '#60a5fa',
+    marginTop: 16,
+  },
+  dangerButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 100,
+    elevation: 3,
+    backgroundColor: '#ef4444',
     marginTop: 16,
   },
   text: {
