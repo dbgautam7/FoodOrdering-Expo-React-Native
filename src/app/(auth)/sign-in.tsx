@@ -3,10 +3,16 @@ import React, { useState } from 'react'
 import Button from '../../components/Button'
 import Colors from '../../constants/Colors'
 import { Link, Stack } from 'expo-router'
+import { supabase } from '@/src/lib/supabase'
 
 const SignInScreen = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const handleLogin = async () => {
+    const {} = supabase.auth.signInWithPassword({ email, password })
+  }
 
   return (
     <View style={styles.container}>

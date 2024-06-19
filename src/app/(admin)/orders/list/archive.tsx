@@ -5,7 +5,7 @@ import ProductListItem from '@/src/components/ProductListItem'
 import orders from '@/assets/data/orders'
 import OrderListItem from '@/src/components/OrderListItem'
 
-export default function OrderScreen() {
+export default function ArchiveScreen() {
   return (
     <FlatList
       data={orders}

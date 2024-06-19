@@ -5,13 +5,20 @@ interface IProps {
   title?: string
   onPress?: () => void
   type?: string
+  disabled?: boolean
 }
 
-export default function Button({ title, onPress, type = 'default' }: IProps) {
+export default function Button({
+  title,
+  onPress,
+  type = 'default',
+  disabled = false,
+}: IProps) {
   return (
     <Pressable
       style={type === 'default' ? styles.defaultButton : styles.dangerButton}
       onPress={onPress}
+      disabled={disabled}
     >
       <Text style={styles.text}>{title}</Text>
     </Pressable>
