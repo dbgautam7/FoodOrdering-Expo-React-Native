@@ -65,4 +65,3 @@ export default CartProvider
 
 export const useCartContext = () => useContext(CartContext)
 
-const styles = StyleSheet.create({})

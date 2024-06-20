@@ -1,4 +1,4 @@
-import { View, Text, TextInput, StyleSheet } from 'react-native'
+import { View, Text, TextInput, StyleSheet, Alert } from 'react-native'
 import React, { useState } from 'react'
 import Button from '../../components/Button'
 import Colors from '../../constants/Colors'
@@ -11,7 +11,11 @@ const SignInScreen = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleLogin = async () => {
-    const {} = supabase.auth.signInWithPassword({ email, password })
+    setIsSubmitting(true)
+    const { data, error } =await supabase.auth.signInWithPassword({ email, password })
+    console.log(data, error, "==========15 in sign in page");
+    if(error) Alert.alert(error.name, error.message)
+      setIsSubmitting(false)
   }
 
   return (
@@ -37,7 +41,7 @@ const SignInScreen = () => {
         secureTextEntry
       />
 
-      <Button title="Sign in" />
+      <Button disabled={isSubmitting} onPress={handleLogin} title={`${isSubmitting ? 'Signing In...':'Sign In'} `} />
       <Link href="/sign-up" style={styles.textButton}>
         Create an account
       </Link>

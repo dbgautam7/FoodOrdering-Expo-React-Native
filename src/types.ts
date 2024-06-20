@@ -54,3 +54,13 @@ export type CartType = {
   updateQuantity: (itemId: string, amount: -1 | 1) => void
   totalPrice: number
 }
+
+export interface IProfile {
+  uuid: string
+  updated_at: string | Date // Using string to represent the timestamp with time zone
+  username: string
+  full_name: string
+  avatar_url: string
+  website: string
+  group: string
+}
