@@ -6,6 +6,8 @@ import { Link, useSegments } from 'expo-router'
 
 const ProductListItem = ({ product }: { product: Product }) => {
   const segments = useSegments()
+  const defaultPizzaImage =
+    'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/food/peperoni.png'
   return (
     <Link href={`${segments[0]}/menu/${product.id}`} asChild>
       <Pressable
@@ -14,7 +16,7 @@ const ProductListItem = ({ product }: { product: Product }) => {
       >
         <Image
           source={{
-            uri: product.image || '',
+            uri: product.image || defaultPizzaImage,
           }}
           style={styles.image}
           resizeMode="contain"

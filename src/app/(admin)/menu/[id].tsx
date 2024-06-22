@@ -15,6 +15,8 @@ const ProductDetailScreen = () => {
   const router = useRouter()
   const [selectedSize, setSelectedSize] = useState<PizzaSize>('M')
   const { id } = useLocalSearchParams()
+  const defaultPizzaImage =
+    'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/food/peperoni.png'
 
   const { data: product, error, isLoading } = useProductDetail(Number(id))
 
@@ -59,7 +61,7 @@ const ProductDetailScreen = () => {
       />
       <Image
         source={{
-          uri: product.image || '',
+          uri: product.image || defaultPizzaImage,
         }}
         style={styles.image}
         resizeMode="contain"

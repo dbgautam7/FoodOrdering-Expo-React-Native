@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import Button from '@/src/components/Button'
 import Colors from '@/src/constants/Colors'
 import { Stack, useLocalSearchParams } from 'expo-router'
+import { useInsertProduct } from '../../api/products'
 
 const CreateProductScreen = () => {
   const [name, setName] = useState<string>('')
@@ -12,6 +13,7 @@ const CreateProductScreen = () => {
   const [errors, setErrors] = useState<string>('')
 
   const { id } = useLocalSearchParams()
+  const createProductMutation = useInsertProduct()
   const isEdit = !!id
   const defaultPizzaImage =
     'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/food/peperoni.png'
@@ -58,10 +60,12 @@ const CreateProductScreen = () => {
     if (!validateInput()) {
       return
     }
+    createProductMutation.mutate({ name, price: parseFloat(price), image })
     console.log('product creating')
 
     setName('')
     setPrice('')
+    setImage('')
   }
 
   const handleEditProduct = () => {
@@ -72,6 +76,7 @@ const CreateProductScreen = () => {
 
     setName('')
     setPrice('')
+    setImage('')
   }
 
   const handleDelete = () => {

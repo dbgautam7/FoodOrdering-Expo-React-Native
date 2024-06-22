@@ -8,3 +8,5 @@ rnfes=>to create components
 3:23:40===>Tuesday
 3:50:57===>Wednesday
 4:23:21===>Thursday
+4:35:41===>Friday
+4:38:25===>Saturday
