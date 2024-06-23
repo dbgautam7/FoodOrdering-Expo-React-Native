@@ -28,7 +28,7 @@ const IndexPage = () => {
       <Link href={'/(user)'} asChild>
         <Button title="User" />
       </Link>
-      <Link href={'/(admin)'} asChild>
+      <Link href={'/(admin)/'} asChild>
         <Button title="Admin" />
       </Link>
       <Button onPress={() => supabase.auth.signOut()} title="Sign Out" />

@@ -1,6 +1,6 @@
 import { supabase } from '@/src/lib/supabase'
 import { Product } from '@/src/types'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 export const useProductLists = () => {
   return useQuery({
@@ -15,7 +15,7 @@ export const useProductLists = () => {
   })
 }
 
-export const useProductDetail = (id: number) => {
+export const useProductDetail = (id: number | undefined) => {
   return useQuery({
     queryKey: ['product', id],
     queryFn: async () => {
@@ -27,12 +27,13 @@ export const useProductDetail = (id: number) => {
       if (error) {
         throw new Error(error.message)
       }
-      return data
+      return data as Product
     },
   })
 }
 
 export const useInsertProduct = () => {
+  const queryClient = useQueryClient()
   return useMutation({
     async mutationFn(data: Omit<Product, 'id'>) {
       const { error, data: newProduct } = await supabase
@@ -48,11 +49,54 @@ export const useInsertProduct = () => {
       }
       return newProduct
     },
-    // async onSuccess() {
-    //   await queryClient.invalidateQueries(['products'])
-    // },
+    async onSuccess() {
+      await queryClient.invalidateQueries({ queryKey: ['products'] })
+    },
     onError(error) {
       console.log(error)
+    },
+  })
+}
+
+export const useUpdateProduct = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    async mutationFn({ id, ...update }: Product) {
+      const { data, error } = await supabase
+        .from('products')
+        .update(update)
+        .eq('id', id)
+        .single()
+
+      if (error) {
+        throw error
+      }
+      return data
+    },
+    async onSuccess(_, { id }) {
+      await queryClient.invalidateQueries({ queryKey: ['products'] })
+      await queryClient.invalidateQueries({ queryKey: ['product', id] })
+    },
+    onError(error) {
+      console.log(error)
+    },
+  })
+}
+
+export const useDeleteProduct = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    async mutationFn(id: number | undefined) {
+      const { error } = await supabase.from('products').delete().eq('id', id)
+
+      if (error) {
+        throw error
+      }
+    },
+    async onSuccess() {
+      await queryClient.invalidateQueries({ queryKey: ['products'] })
     },
   })
 }

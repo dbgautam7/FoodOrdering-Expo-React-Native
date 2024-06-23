@@ -1,20 +1,34 @@
 import { Alert, Image, StyleSheet, Text, TextInput, View } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Button from '@/src/components/Button'
 import Colors from '@/src/constants/Colors'
-import { Stack, useLocalSearchParams } from 'expo-router'
-import { useInsertProduct } from '../../api/products'
+import { Stack, useLocalSearchParams, useRouter } from 'expo-router'
+import {
+  useDeleteProduct,
+  useInsertProduct,
+  useProductDetail,
+  useUpdateProduct,
+} from '../../api/products'
 
 const CreateProductScreen = () => {
   const [name, setName] = useState<string>('')
   const [price, setPrice] = useState<string>('')
   const [image, setImage] = useState<string | null>(null)
   const [errors, setErrors] = useState<string>('')
+  const router = useRouter()
 
-  const { id } = useLocalSearchParams()
-  const createProductMutation = useInsertProduct()
+  const { id: idString } = useLocalSearchParams()
+  const id = idString
+    ? parseFloat(typeof idString === 'string' ? idString : idString?.[0])
+    : undefined
   const isEdit = !!id
+
+  const { data: productDetail } = useProductDetail(id)
+  const createProductMutation = useInsertProduct()
+  const updateProductMutation = useUpdateProduct()
+  const deleteMutation = useDeleteProduct()
+
   const defaultPizzaImage =
     'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/food/peperoni.png'
 
@@ -56,32 +70,49 @@ const CreateProductScreen = () => {
     isEdit ? handleEditProduct() : handleCreateProduct()
   }
 
+  const resetFields = () => {
+    setName('')
+    setPrice('')
+    setImage('')
+  }
+
   const handleCreateProduct = () => {
     if (!validateInput()) {
       return
     }
-    createProductMutation.mutate({ name, price: parseFloat(price), image })
-    console.log('product creating')
-
-    setName('')
-    setPrice('')
-    setImage('')
+    createProductMutation.mutate(
+      { name, price: parseFloat(price), image },
+      {
+        onSuccess: () => {
+          resetFields()
+          router.back()
+        },
+      }
+    )
   }
 
   const handleEditProduct = () => {
     if (!validateInput()) {
       return
     }
-    console.log('product editing')
-
-    setName('')
-    setPrice('')
-    setImage('')
+    updateProductMutation.mutate(
+      { id, name, price: parseFloat(price), image },
+      {
+        onSuccess: () => {
+          resetFields()
+          router.back()
+        },
+      }
+    )
   }
 
   const handleDelete = () => {
-    console.log('called')
-    Alert.alert('Product deleted')
+    deleteMutation.mutate(id, {
+      onSuccess: () => {
+        resetFields()
+        router.replace('/(admin)')
+      },
+    })
   }
 
   const confirmDelete = () => {
@@ -90,6 +121,14 @@ const CreateProductScreen = () => {
       { text: 'Delete', style: 'destructive', onPress: handleDelete },
     ])
   }
+
+  useEffect(() => {
+    if (productDetail) {
+      setName(productDetail.name)
+      setPrice(productDetail.price.toString())
+      setImage(productDetail.image)
+    }
+  }, [productDetail])
 
   return (
     <View style={styles.container}>
