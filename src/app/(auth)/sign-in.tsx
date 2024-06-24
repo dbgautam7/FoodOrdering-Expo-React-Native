@@ -12,10 +12,13 @@ const SignInScreen = () => {
 
   const handleLogin = async () => {
     setIsSubmitting(true)
-    const { data, error } =await supabase.auth.signInWithPassword({ email, password })
-    console.log(data, error, "==========15 in sign in page");
-    if(error) Alert.alert(error.name, error.message)
-      setIsSubmitting(false)
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    })
+    console.log(data, error, '==========15 in sign in page')
+    if (error) Alert.alert(error.name, error.message)
+    setIsSubmitting(false)
   }
 
   return (
@@ -41,7 +44,11 @@ const SignInScreen = () => {
         secureTextEntry
       />
 
-      <Button disabled={isSubmitting} onPress={handleLogin} title={`${isSubmitting ? 'Signing In...':'Sign In'} `} />
+      <Button
+        disabled={isSubmitting}
+        onPress={handleLogin}
+        title={`${isSubmitting ? 'Signing In...' : 'Sign In'} `}
+      />
       <Link href="/sign-up" style={styles.textButton}>
         Create an account
       </Link>

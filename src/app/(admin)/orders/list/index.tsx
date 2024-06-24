@@ -1,11 +1,23 @@
-import { FlatList, StyleSheet } from 'react-native'
-import { Text, View } from '@/src/components/Themed'
-import products from '@/assets/data/products'
-import ProductListItem from '@/src/components/ProductListItem'
-import orders from '@/assets/data/orders'
+import { ActivityIndicator, FlatList, StyleSheet } from 'react-native'
+// import orders from '@/assets/data/orders'
 import OrderListItem from '@/src/components/OrderListItem'
+import { useAdminOrderLists } from '@/src/app/api/orders'
+import { Text } from '@/src/components/Themed'
 
 export default function ActiveScreen() {
+  const {
+    data: orders,
+    isLoading,
+    error,
+  } = useAdminOrderLists({ archived: false })
+
+  if (isLoading) {
+    return <ActivityIndicator />
+  }
+
+  if (error) {
+    return <Text>Failed to load Products.</Text>
+  }
   return (
     <FlatList
       data={orders}

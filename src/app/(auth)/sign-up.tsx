@@ -14,6 +14,7 @@ const SignUpScreen = () => {
     setIsSubmitting(true)
     console.warn('Sign up')
     const { error, data } = await supabase.auth.signUp({ email, password })
+    console.log(error, 'error====17')
     if (error) Alert.alert(error.name, error.message)
     setIsSubmitting(false)
     console.log(data, 'data')

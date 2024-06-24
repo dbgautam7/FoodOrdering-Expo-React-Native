@@ -1,11 +1,25 @@
-import { FlatList, StyleSheet } from 'react-native'
-import { Text, View } from '@/src/components/Themed'
-import products from '@/assets/data/products'
-import ProductListItem from '@/src/components/ProductListItem'
-import orders from '@/assets/data/orders'
+import { ActivityIndicator, FlatList, StyleSheet } from 'react-native'
+import { Text } from '@/src/components/Themed'
 import OrderListItem from '@/src/components/OrderListItem'
+import { useAdminOrderLists } from '@/src/app/api/orders'
 
 export default function ArchiveScreen() {
+  const {
+    data: orders,
+    isLoading,
+    error,
+  } = useAdminOrderLists({ archived: true })
+
+  if (isLoading) {
+    return <ActivityIndicator />
+  }
+
+  if (error) {
+    return <Text>Failed to load Products.</Text>
+  }
+
+  console.log(orders, 'orders in archive')
+
   return (
     <FlatList
       data={orders}
