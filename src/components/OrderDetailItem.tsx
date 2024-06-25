@@ -11,14 +11,14 @@ const OrderDetailItem = ({ item }: OrderItemListItemProps) => {
   return (
     <View style={styles.container}>
       <Image
-        source={{ uri: item.products.image || '' }}
+        source={{ uri: item?.products.image || '' }}
         style={styles.image}
         resizeMode="contain"
       />
       <View style={{ flex: 1 }}>
-        <Text style={styles.title}>{item.products.name}</Text>
+        <Text style={styles.title}>{item?.products.name}</Text>
         <View style={styles.subtitleContainer}>
-          <Text style={styles.price}>${item.products.price.toFixed(2)}</Text>
+          <Text style={styles.price}>${item?.products.price.toFixed(2)}</Text>
           <Text>Size: {item.size}</Text>
         </View>
       </View>

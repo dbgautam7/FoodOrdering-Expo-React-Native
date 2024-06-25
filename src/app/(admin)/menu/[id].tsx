@@ -25,7 +25,7 @@ const ProductDetailScreen = () => {
   }
 
   if (error) {
-    return <Text>Failed to load Products.</Text>
+    return <Text>Failed to load Orders.</Text>
   }
 
   if (!product) {

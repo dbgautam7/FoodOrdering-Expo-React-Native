@@ -5,6 +5,7 @@ import { useMyOrders } from '../../api/orders'
 
 export default function OrderScreen() {
   const { data: orders, isLoading, error } = useMyOrders()
+  console.log('🚀 ~ OrderScreen ~ orders:', orders)
 
   if (isLoading) {
     return <ActivityIndicator />
@@ -13,6 +14,7 @@ export default function OrderScreen() {
   if (error) {
     return <Text>Failed to load Products.</Text>
   }
+
   return (
     <FlatList
       data={orders}

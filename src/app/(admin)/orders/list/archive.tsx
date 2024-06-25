@@ -15,10 +15,8 @@ export default function ArchiveScreen() {
   }
 
   if (error) {
-    return <Text>Failed to load Products.</Text>
+    return <Text>Failed to load Archived Orders.</Text>
   }
-
-  console.log(orders, 'orders in archive')
 
   return (
     <FlatList

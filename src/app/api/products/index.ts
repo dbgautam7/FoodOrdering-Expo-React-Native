@@ -16,8 +16,9 @@ export const useProductLists = () => {
 }
 
 export const useProductDetail = (id: number | undefined) => {
+  console.log(id, 'id')
   return useQuery({
-    queryKey: ['product', id],
+    queryKey: ['products', id],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('products')

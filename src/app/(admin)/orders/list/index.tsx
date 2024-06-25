@@ -16,7 +16,7 @@ export default function ActiveScreen() {
   }
 
   if (error) {
-    return <Text>Failed to load Products.</Text>
+    return <Text>Failed to load Orders List.</Text>
   }
   return (
     <FlatList

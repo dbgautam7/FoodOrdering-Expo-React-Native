@@ -10,7 +10,7 @@ export type PizzaSize = 'S' | 'M' | 'L' | 'XL'
 export type CartItem = {
   id: string
   product: Product
-  product_id: number
+  product_id: number | undefined
   size: PizzaSize
   quantity: number
 }
@@ -35,7 +35,7 @@ export type Order = {
 }
 
 export type OrderItem = {
-  id: number
+  id?: number
   product_id: number
   products: Product
   order_id: number
@@ -53,6 +53,7 @@ export type CartType = {
   addItem: (product: Product, size: CartItem['size']) => void
   updateQuantity: (itemId: string, amount: -1 | 1) => void
   totalPrice: number
+  checkout: () => void
 }
 
 export interface IProfile {

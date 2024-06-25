@@ -6,7 +6,7 @@ import CartListItem from '../components/CartListItem'
 import Button from '../components/Button'
 
 const Cart = () => {
-  const { items, totalPrice } = useCartContext()
+  const { items, totalPrice, checkout } = useCartContext()
 
   return (
     <View style={styles.container}>
@@ -22,7 +22,7 @@ const Cart = () => {
           <Text style={styles.totalPrice}>
             Total Price: ${totalPrice.toFixed(2)}
           </Text>
-          <Button title="Checkout" />
+          <Button onPress={checkout} title="Checkout" />
         </View>
       ) : (
         <View style={styles.notFoundContainer}>
