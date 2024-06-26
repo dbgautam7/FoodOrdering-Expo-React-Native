@@ -2,16 +2,20 @@ import { View, Text, StyleSheet, Image } from 'react-native'
 import React from 'react'
 import Colors from '../constants/Colors'
 import { OrderItem } from '../types'
+import RemoteImage from './RemoteImage'
 
 type OrderItemListItemProps = {
   item: OrderItem
 }
 
 const OrderDetailItem = ({ item }: OrderItemListItemProps) => {
+  const defaultPizzaImage =
+    'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/food/peperoni.png'
   return (
     <View style={styles.container}>
-      <Image
-        source={{ uri: item?.products.image || '' }}
+      <RemoteImage
+        path={item?.products.image}
+        fallback={defaultPizzaImage}
         style={styles.image}
         resizeMode="contain"
       />

@@ -1,9 +1,10 @@
-import { View, Text, StyleSheet, Image, Pressable } from 'react-native'
+import { View, Text, StyleSheet, Image } from 'react-native'
 import React from 'react'
 import Colors from '../constants/Colors'
 import { CartItem } from '../types'
 import { FontAwesome } from '@expo/vector-icons'
 import { useCartContext } from '../providers/CartProvider'
+import RemoteImage from './RemoteImage'
 
 type CartListItemProps = {
   cartItem: CartItem
@@ -11,10 +12,13 @@ type CartListItemProps = {
 
 const CartListItem = ({ cartItem }: CartListItemProps) => {
   const { updateQuantity } = useCartContext()
+  const defaultPizzaImage =
+    'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/food/peperoni.png'
   return (
     <View style={styles.container}>
-      <Image
-        source={{ uri: cartItem?.product?.image ?? '' }}
+      <RemoteImage
+        path={cartItem?.product?.image}
+        fallback={defaultPizzaImage}
         style={styles.image}
         resizeMode="contain"
       />

@@ -1,6 +1,6 @@
 import { supabase } from '@/src/lib/supabase'
 import { useAuth } from '@/src/providers/AuthProvider'
-import { Order, Product } from '@/src/types'
+import { Order } from '@/src/types'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 export const useAdminOrderLists = ({ archived = false }) => {
@@ -91,4 +91,37 @@ function order_items(arg0: number):
     }
   | undefined {
   throw new Error('Function not implemented.')
+}
+
+export const useUpdateOrder = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    async mutationFn({
+      id,
+      updatedFields,
+    }: {
+      id: number
+      updatedFields: Pick<Order, 'status'>
+    }) {
+      const { data: updatedOrder, error } = await supabase
+        .from('orders')
+        .update(updatedFields)
+        .eq('id', id)
+        .select()
+        .single()
+
+      if (error) {
+        throw error
+      }
+      return updatedOrder
+    },
+    async onSuccess(_, { id }) {
+      await queryClient.invalidateQueries({ queryKey: ['orders'] })
+      await queryClient.invalidateQueries({ queryKey: ['orders', id] })
+    },
+    onError(error) {
+      console.log(error)
+    },
+  })
 }

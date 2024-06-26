@@ -1,6 +1,6 @@
 export type Product = {
   id?: number | undefined
-  image: string | null
+  image: string | undefined | null
   name: string
   price: number
 }

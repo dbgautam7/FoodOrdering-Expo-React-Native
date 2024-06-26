@@ -10,11 +10,15 @@ import {
   useProductDetail,
   useUpdateProduct,
 } from '../../api/products'
+import * as FileSystem from 'expo-file-system'
+import { supabase } from '@/src/lib/supabase'
+import { randomUUID } from 'expo-crypto'
+import { decode } from 'base64-arraybuffer'
 
 const CreateProductScreen = () => {
   const [name, setName] = useState<string>('')
   const [price, setPrice] = useState<string>('')
-  const [image, setImage] = useState<string | null>(null)
+  const [image, setImage] = useState<string | null | undefined>(null)
   const [errors, setErrors] = useState<string>('')
   const router = useRouter()
 
@@ -76,12 +80,13 @@ const CreateProductScreen = () => {
     setImage('')
   }
 
-  const handleCreateProduct = () => {
+  const handleCreateProduct = async () => {
     if (!validateInput()) {
       return
     }
+    const imagePath = await uploadImage()
     createProductMutation.mutate(
-      { name, price: parseFloat(price), image },
+      { name, price: parseFloat(price), image: imagePath },
       {
         onSuccess: () => {
           resetFields()
@@ -91,12 +96,13 @@ const CreateProductScreen = () => {
     )
   }
 
-  const handleEditProduct = () => {
+  const handleEditProduct = async () => {
     if (!validateInput()) {
       return
     }
+    const imagePath = await uploadImage()
     updateProductMutation.mutate(
-      { id, name, price: parseFloat(price), image },
+      { id, name, price: parseFloat(price), image: imagePath },
       {
         onSuccess: () => {
           resetFields()
@@ -129,6 +135,26 @@ const CreateProductScreen = () => {
       setImage(productDetail.image)
     }
   }, [productDetail])
+
+  const uploadImage = async () => {
+    if (!image?.startsWith('file://')) {
+      return
+    }
+    const base64 = await FileSystem.readAsStringAsync(image, {
+      encoding: 'base64',
+    })
+    const filePath = `${randomUUID()}.png`
+    const contentType = 'image/png'
+    const { data, error } = await supabase.storage
+      .from('product-images')
+      .upload(filePath, decode(base64), { contentType })
+
+    console.log(error, 'error')
+
+    if (data) {
+      return data?.path
+    }
+  }
 
   return (
     <View style={styles.container}>

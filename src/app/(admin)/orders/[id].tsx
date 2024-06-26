@@ -5,17 +5,20 @@ import {
   FlatList,
   Pressable,
   ActivityIndicator,
+  Alert,
 } from 'react-native'
 import { Stack, useLocalSearchParams } from 'expo-router'
 import orders from '../../../../assets/data/orders'
 import OrderListItem from '../../../components/OrderListItem'
 import OrderDetailItem from '@/src/components/OrderDetailItem'
-import { OrderStatusList } from '@/src/types'
+import { OrderStatus, OrderStatusList } from '@/src/types'
 import Colors from '@/src/constants/Colors'
-import { useOrderDetail } from '../../api/orders'
+import { useOrderDetail, useUpdateOrder } from '../../api/orders'
 
 const OrderDetailScreen = () => {
   const { id } = useLocalSearchParams()
+
+  const updateOrderStatusMutation = useUpdateOrder()
 
   const { data: order, isLoading, error } = useOrderDetail(Number(id))
 
@@ -29,6 +32,22 @@ const OrderDetailScreen = () => {
 
   if (!order) {
     return <Text>Order not found!</Text>
+  }
+
+  const updateOrderStatus = (status: OrderStatus) => {
+    updateOrderStatusMutation.mutateAsync(
+      {
+        id: Number(id),
+        updatedFields: {
+          status: status,
+        },
+      },
+      {
+        onSuccess: (res) => {
+          Alert.alert('Success', `Order status changed to ${res.status}`)
+        },
+      }
+    )
   }
 
   return (
@@ -48,7 +67,7 @@ const OrderDetailScreen = () => {
               {OrderStatusList.map((status) => (
                 <Pressable
                   key={status}
-                  // onPress={() => updateStatus(status)}
+                  onPress={() => updateOrderStatus(status)}
                   style={{
                     borderColor: Colors.light.tint,
                     borderWidth: 1,

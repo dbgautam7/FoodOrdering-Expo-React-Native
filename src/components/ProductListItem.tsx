@@ -3,6 +3,7 @@ import { Text } from '@/src/components/Themed'
 import Colors from '@/src/constants/Colors'
 import { Product } from '@/src/types'
 import { Link, useSegments } from 'expo-router'
+import RemoteImage from './RemoteImage'
 
 const ProductListItem = ({ product }: { product: Product }) => {
   const segments = useSegments()
@@ -14,10 +15,9 @@ const ProductListItem = ({ product }: { product: Product }) => {
         onPress={() => Vibration.vibrate(100)}
         style={styles.container}
       >
-        <Image
-          source={{
-            uri: product.image || defaultPizzaImage,
-          }}
+        <RemoteImage
+          path={product?.image}
+          fallback={defaultPizzaImage}
           style={styles.image}
           resizeMode="contain"
         />
@@ -49,7 +49,8 @@ const styles = StyleSheet.create({
     color: Colors.light.text,
   },
   image: {
-    width: '100%',
+    width: 100,
+    height: 100,
     aspectRatio: 1,
   },
 })

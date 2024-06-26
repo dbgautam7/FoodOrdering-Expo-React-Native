@@ -68,7 +68,7 @@ export const useUpdateProduct = () => {
         .from('products')
         .update(update)
         .eq('id', id)
-        .single()
+        .select()
 
       if (error) {
         throw error
@@ -77,7 +77,7 @@ export const useUpdateProduct = () => {
     },
     async onSuccess(_, { id }) {
       await queryClient.invalidateQueries({ queryKey: ['products'] })
-      await queryClient.invalidateQueries({ queryKey: ['product', id] })
+      await queryClient.invalidateQueries({ queryKey: ['products', id] })
     },
     onError(error) {
       console.log(error)

@@ -1,8 +1,5 @@
-import Colors from '@/src/constants/Colors'
-import { AntDesign } from '@expo/vector-icons'
-import { Link, Stack } from 'expo-router'
+import { Stack } from 'expo-router'
 import React from 'react'
-import { Pressable } from 'react-native'
 
 const MenuStack = () => {
   return (

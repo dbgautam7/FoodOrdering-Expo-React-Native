@@ -6,16 +6,17 @@ import {
   ActivityIndicator,
 } from 'react-native'
 import { Stack, useLocalSearchParams } from 'expo-router'
-import orders from '../../../../assets/data/orders'
 import OrderListItem from '../../../components/OrderListItem'
 import OrderDetailItem from '@/src/components/OrderDetailItem'
-import { useMyOrders, useOrderDetail } from '../../api/orders'
-import { Order } from '@/src/types'
+import { useOrderDetail } from '../../api/orders'
+import { useUpdateOrderSubscription } from '../../api/orders/subscription'
 
 const OrderDetailScreen = () => {
   const { id } = useLocalSearchParams()
 
   const { data: order, isLoading, error } = useOrderDetail(Number(id))
+
+  useUpdateOrderSubscription(Number(id))
 
   if (isLoading) {
     return <ActivityIndicator />
