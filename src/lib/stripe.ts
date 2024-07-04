@@ -49,7 +49,7 @@ export const initializePaymentSheet = async (amount: number) => {
     // Initialize payment sheet (uncomment and use the actual method from your payment library)
     const { error } = await initPaymentSheet({
       merchantDisplayName: 'Example, Inc.',
-      paymentIntentClientSecret: 'pi_3PYjYGRpNGYU0VhQ1jxdM7J1_secret_HUCYMZVqfV9BThDA29tFuVvlW',
+      paymentIntentClientSecret: 'pi_3PYkM2RpNGYU0VhQ0JWBx668_secret_wbuedLsCufz4TCwHHJEm8jXPv',
       defaultBillingDetails: {
         name: 'DB',
       },
