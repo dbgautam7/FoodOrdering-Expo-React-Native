@@ -15,6 +15,7 @@ import { useColorScheme } from '@/src/components/useColorScheme'
 import CartProvider from '../providers/CartProvider'
 import AuthProvider from '../providers/AuthProvider'
 import QueryProvider from '../providers/QueryProvider'
+import NotificationProvider from '../providers/NotificationProvider'
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -66,6 +67,7 @@ function RootLayoutNav() {
                 process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY || ''
               }
             >
+              <NotificationProvider>
               <Stack>
                 <Stack.Screen name="(admin)" options={{ headerShown: false }} />
                 <Stack.Screen name="(user)" options={{ headerShown: false }} />
@@ -79,6 +81,7 @@ function RootLayoutNav() {
                   }}
                 />
               </Stack>
+              </NotificationProvider>
             </StripeProvider>
           </CartProvider>
         </QueryProvider>
