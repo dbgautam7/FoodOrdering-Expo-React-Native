@@ -4,3 +4,5 @@ import Stripe from 'https://esm.sh/stripe@13.10.0?target=deno&deno-std=0.132.0&n
 export const stripe = Stripe(Deno.env.get('STRIPE_SECRET_KEY') ?? '', {
   httpClient: Stripe.createFetchHttpClient(),
 });
+
+console.log(Deno.env.get('STRIPE_SECRET_KEY'), "ooooooooo");
